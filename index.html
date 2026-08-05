@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AIUB Routine Generator - Fall 2026-27</title>
+<meta name="description" content="Generate clash-free class routines for AIUB Fall 2026-27"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>"/>
+<style>html,body{margin:0;padding:0;height:100%}#root{height:100%}</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.5/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useMemo, useCallback, useRef } = React;
+
+
+
+const D=[["DATA COMMUNICATION",[["A",[["8:00-10:00","S","9401","T"],["8:0-10:20","T","DS0406","L"]]],["B",[["10:20-12:20","M","9401","T"],["10:20-12:40","W","DS0406","L"]]],["C",[["12:40-2:40","T","9401","T"],["12:40-3:0","S","DS0406","L"]]],["D",[["3:00-5:00","W","9401","T"],["3:0-5:20","M","DS0406","L"]]],["E",[["10:20-12:20","S","9401","T"],["10:20-12:40","T","DS0406","L"]]],["F",[["12:40-2:40","M","9401","T"],["12:40-3:0","W","DS0406","L"]]],["G",[["3:00-5:00","T","9401","T"],["3:0-5:20","S","DS0406","L"]]],["H",[["12:40-2:40","W","9406","T"],["12:40-3:0","M","DS0406","L"]]],["I",[["12:40-2:40","S","9401","T"],["12:40-3:00","T","DS0308","L"]]],["J",[["3:00-5:00","M","9401","T"],["3:0-5:20","W","DS0406","L"]]],["K",[["8:00-10:00","T","9401","T"],["8:00-10:20","S","DS0406","L"]]],["L",[["10:20-12:20","W","9401","T"],["10:20-12:40","M","DS0406","L"]]],["M",[["3:00-5:00","S","9401","T"],["3:0-5:20","T","DS0406","L"]]],["N",[["8:00-10:00","M","9401","T"],["8:00-10:20","W","DS0406","L"]]],["O",[["10:20-12:20","T","9401","T"],["10:20-12:40","S","DS0406","L"]]]]],["DATA WAREHOUSE AND DATA MINING",[["A",[["11:20-12:50","ST","3106","T"]]],["B",[["11:20-12:50","MW","3106","T"]]],["C",[["1:00-2:30","ST","3106","T"]]],["D",[["1:00-2:30","MW","3106","T"]]],["E",[["2:40-4:10","ST","3105","T"]]],["F",[["2:40-4:10","MW","3105","T"]]]]],["ENGINEERING MANAGEMENT",[["A",[["8:0-9:30","ST","1101","T"]]],["B",[["8:0-9:30","MW","1101","T"]]],["C",[["9:40-11:10","ST","1101","T"]]],["D",[["9:40-11:10","MW","1101","T"]]],["E",[["11:20-12:50","ST","1101","T"]]],["F",[["11:20-12:50","MW","1101","T"]]],["G",[["1:0-2:30","ST","1101","T"]]],["H",[["1:0-2:30","MW","1101","T"]]],["I",[["2:40-4:10","ST","1101","T"]]],["J",[["2:40-4:10","MW","1101","T"]]],["K",[["8:0-9:30","ST","1102","T"]]],["L",[["8:0-9:30","MW","1102","T"]]],["M",[["9:40-11:10","ST","1102","T"]]],["N",[["9:40-11:10","MW","1102","T"]]]]],["MICRO & EMBEDDED SYSTEM",[["A",[["10:20-12:20","S","9404","T"],["10:20-12:40","T","DN0310","L"]]],["B",[["12:40-2:40","M","9404","T"],["12:40-3:00","W","DN0310","L"]]],["C",[["3:0-5:0","T","9404","T"],["3:00-5:20","S","DN0310","L"]]],["D",[["8:0-10:0","W","9404","T"],["8:0-10:20","M","DN0310","L"]]],["E",[["12:40-2:40","S","9404","T"],["12:40-3:00","T","DN0310","L"]]],["F",[["3:0-5:0","M","9404","T"],["3:00-5:20","W","DN0310","L"]]],["G",[["8:0-10:0","T","9404","T"],["8:0-10:20","S","DN0309","L"]]],["H",[["10:20-12:20","W","9404","T"],["10:20-12:40","M","DN0310","L"]]],["I",[["3:0-5:0","S","9404","T"],["3:00-5:20","T","DN0310","L"]]],["J",[["8:0-10:0","M","9404","T"],["8:0-10:20","W","DN0310","L"]]],["K",[["10:20-12:20","T","9404","T"],["10:20-12:40","S","DN0310","L"]]],["L",[["12:40-2:40","W","9404","T"],["12:40-3:00","M","DN0310","L"]]],["M",[["8:0-10:0","S","9405","T"],["8:0-10:20","T","DN0310","L"]]],["N",[["10:20-12:20","M","9405","T"],["10:20-12:40","W","DN0310","L"]]],["O",[["12:40-2:40","T","9405","T"],["12:40-3:0","S","DN0310","L"]]],["P",[["3:0-5:0","W","9405","T"],["3:00-5:20","M","DN0310","L"]]],["Q",[["10:20-12:20","S","9405","T"],["10:20-12:40","T","DS0308","L"]]],["R",[["12:40-2:40","M","9405","T"],["12:40-3:0","W","DS0308","L"]]],["S",[["3:0-5:0","T","9405","T"],["3:00-5:20","S","DS0308","L"]]],["T",[["12:40-2:40","W","9401","T"],["12:40-3:00","M","DS0308","L"]]],["U",[["12:40-2:40","S","9405","T"],["12:40-3:0","T","DN0309","L"]]]]],["WEB TECHNOLOGIES",[["A",[["3:00-5:00","M","9307","T"],["3:0-5:20","W","DS0207","L"]]],["B",[["8:00-10:00","T","9307","T"],["8:0-10:20","S","DS0208","L"]]],["C",[["10:20-12:20","W","9307","T"],["10:20-12:40","M","DS0208","L"]]],["D",[["3:00-5:00","M","9310","T"],["3:0-5:20","W","DS0205","L"]]],["E",[["8:00-10:00","M","9307","T"],["8:0-10:20","W","DS0208","L"]]],["F",[["10:20-12:20","T","9307","T"],["10:20-12:40","S","DS0206","L"]]],["G",[["12:40-2:40","W","9307","T"],["12:40-3:0","M","DS0208","L"]]],["H",[["8:00-10:00","S","9308","T"],["8:0-10:20","T","DS0208","L"]]],["I",[["10:20-12:20","M","9308","T"],["10:20-12:40","W","DS0208","L"]]],["J",[["12:40-2:40","T","9308","T"],["12:40-3:0","S","DS0208","L"]]],["K",[["3:00-5:00","W","9308","T"],["3:0-5:20","M","DS0208","L"]]],["L",[["10:20-12:20","T","9305","T"],["10:20-12:40","S","DS0204","L"]]],["M",[["10:20-12:20","T","9308","T"],["10:20-12:40","S","DS0208","L"]]],["N",[["3:00-5:00","T","9308","T"],["3:0-5:20","S","DS0207","L"]]],["O",[["10:20-12:20","T","9306","T"],["10:20-12:40","S","DN0110","L"]]],["P",[["12:40-2:40","S","9308","T"],["12:40-3:0","T","DS0208","L"]]],["Q",[["12:40-2:40","M","9203","T"],["12:40-3:0","W","DS0104","L"]]],["R",[["12:40-2:40","W","9308","T"],["12:40-3:0","M","DS0207","L"]]],["S",[["8:0-10:0","S","9205","T"],["8:0-10:20","T","DS0106","L"]]],["T",[["8:0-10:0","M","9207","T"],["8:0-10:20","W","DS0108","L"]]],["U",[["10:20-12:20","M","9307","T"],["10:20-12:40","W","DS0207","L"]]],["V",[["10:20-12:20","S","9203","T"],["10:20-12:40","T","DS0104","L"]]],["W",[["3:0-5:0","M","9212","T"],["3:0-5:20","W","DS0203","L"]]],["X",[["12:40-2:40","T","9212","T"],["12:40-3:0","S","DN0112","L"]]],["Y",[["3:0-5:0","W","9212","T"],["3:0-5:20","M","DN0111","L"]]],["Z",[["3:00-5:00","S","9305","T"],["3:0-5:20","TH","DS0203","L"]]]]]];
+
+const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const HOURS=Array.from({length:16},(_,i)=>i+8);
+const PAL=["#3b82f6","#ef4444","#22c55e","#f59e0b","#8b5cf6","#ec4899","#14b8a6","#f97316","#6366f1","#06b6d4"];
+
+function parseDays(s){if(!s)return[];const d=[];let i=0;const u=s.toUpperCase();while(i<u.length){if(u[i]==='T'&&u[i+1]==='H'){d.push("Thu");i+=2}else if(u[i]==='S'){d.push("Sun");i++}else if(u[i]==='M'){d.push("Mon");i++}else if(u[i]==='T'){d.push("Tue");i++}else if(u[i]==='W'){d.push("Wed");i++}else if(u[i]==='F'){d.push("Fri");i++}else i++}return d}
+function parseTime(s){if(!s)return null;const c=s.replace(/\s/g,"").replace(/AM|PM/gi,"").replace(/[–—]/g,"-");const p=c.split("-");if(p.length<2)return null;const toM=t=>{if(!t)return 0;const sg=t.split(/[:.]/);const h=parseInt(sg[0],10)||0;const m=parseInt(sg[1],10)||0;return(h<8?h+12:h)*60+m};const st=toM(p[0]),en=toM(p[1]);return en>st?{start:st,end:en}:null}
+function parseSlots(raw){const o=[];for(const[time,day,room,type]of raw){const p=parseTime(time);if(!p)continue;const days=parseDays(day);if(!days.length)continue;o.push({time,day,room,type,start:p.start,end:p.end,days})}return o}
+function clash(a,b){for(const sa of a)for(const sb of b)for(const da of sa.days)if(sb.days.includes(da)&&sa.start<sb.end&&sb.start<sa.end)return true;return false}
+function fmtT(m){let h=Math.floor(m/60),mn=m%60;const ap=h>=12?"PM":"AM";if(h>12)h-=12;if(h===0)h=12;return h+":"+String(mn).padStart(2,"0")+" "+ap}
+function fmtS(m){let h=Math.floor(m/60),mn=m%60;const ap=h>=12?"PM":"AM";if(h>12)h-=12;if(h===0)h=12;return h+":"+String(mn).padStart(2,"0")+ap}
+
+const ALL=D.map((c,i)=>({id:i,name:c[0],sections:c[1].map(([sec,raw])=>({sec,slots:parseSlots(raw)}))}));
+
+function calcGap(combo){let t=0;for(const day of DAYS){const sl=[];combo.forEach(c=>c.slots.forEach(s=>{if(s.days.includes(day))sl.push(s)}));sl.sort((a,b)=>a.start-b.start);for(let i=1;i<sl.length;i++)t+=Math.max(0,sl[i].start-sl[i-1].end)}return t}
+
+function generate(courses,opts){
+  const{earliest,latest,daysOnly,sortGaps}=opts;
+  const filtered=courses.map(c=>({...c,sections:c.sections.filter(sec=>{
+    for(const sl of sec.slots){if(sl.start<earliest||sl.end>latest)return false;if(daysOnly.length>0&&!sl.days.every(d=>daysOnly.includes(d)))return false}
+    return sec.slots.length>0
+  })}));
+  const results=[];
+  function bt(ci,chosen){
+    if(results.length>=500)return;
+    if(ci>=filtered.length){results.push([...chosen]);return}
+    for(const sec of filtered[ci].sections){
+      let ok=true;
+      for(const prev of chosen)if(clash(sec.slots,prev.slots)){ok=false;break}
+      if(ok){chosen.push({courseId:filtered[ci].id,name:filtered[ci].name,sec:sec.sec,slots:sec.slots});bt(ci+1,chosen);chosen.pop()}
+    }
+  }
+  bt(0,[]);
+  if(sortGaps==="min")results.sort((a,b)=>calcGap(a)-calcGap(b));
+  return results;
+}
+
+const css=`
+*{box-sizing:border-box;margin:0;padding:0}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#0a1219}
+::-webkit-scrollbar-thumb{background:#1e3a5f;border-radius:3px}
+.wrap{display:flex;min-height:100vh;background:#0f1923;color:#e0e6ed;font-family:'Segoe UI',system-ui,sans-serif}
+.sidebar{width:52px;min-width:52px;background:#080e14;border-right:1px solid #1a2a3a;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px}
+.sb-btn{width:40px;height:40px;border-radius:10px;border:none;background:transparent;color:#5a7a94;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.sb-btn:hover,.sb-btn.act{background:#12202e;color:#38bdf8}
+.main-col{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{background:#0a1219;border-bottom:1px solid #1a2a3a;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.body{display:flex;flex:1;overflow:hidden}
+.lpanel{width:320px;min-width:320px;background:#0d161f;border-right:1px solid #1a2a3a;overflow-y:auto;display:flex;flex-direction:column}
+.rpanel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.phdr{padding:12px 14px;font-size:13px;font-weight:700;color:#c8d6e0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid #1a2a3a;user-select:none}
+.phdr:hover{background:#121f2d}
+.sbox{width:100%;padding:9px 12px;background:#0a1219;border:1.5px solid #1a2a3a;border-radius:7px;color:#e0e6ed;font-size:13px;outline:none}
+.sbox:focus{border-color:#38bdf8}
+.sbox::placeholder{color:#4a6070}
+.ctag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px 4px 8px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid;margin:3px;cursor:default;white-space:nowrap}
+.tx{background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;font-weight:700;padding:0 2px}
+.tx:hover{color:#f87171}
+.ditem{padding:9px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid #111d28;display:flex;justify-content:space-between;align-items:center}
+.ditem:hover{background:#162a3a}
+.orow{padding:7px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:#a0b4c4}
+.osel{background:#0a1219;border:1px solid #1a2a3a;color:#e0e6ed;border-radius:6px;padding:5px 8px;font-size:12px;cursor:pointer;flex:1;max-width:150px}
+.dchecks{display:flex;flex-wrap:wrap;gap:4px;padding:4px 14px 8px}
+.dchk{display:flex;align-items:center;gap:3px;font-size:11px;color:#8899aa;cursor:pointer;padding:4px 8px;border-radius:6px;border:1px solid #1a2a3a;background:#0a1219;user-select:none;transition:.15s}
+.dchk.on{border-color:#38bdf8;color:#38bdf8;background:#0c2a3f}
+.gbtn{width:calc(100% - 28px);margin:10px 14px;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#0ea5e9,#3b82f6);color:#fff;transition:.2s;letter-spacing:.3px}
+.gbtn:hover{filter:brightness(1.1)}
+.gbtn:disabled{opacity:.5;cursor:wait}
+.tgrid{display:grid;grid-template-columns:52px repeat(7,1fr);min-width:660px;position:relative}
+.thdr{padding:9px 2px;text-align:center;font-size:11px;font-weight:700;color:#8899aa;border-bottom:2px solid #1a2a3a;background:#0a1219;position:sticky;top:0;z-index:5}
+.dcol{position:relative;border-left:1px solid #111d28;min-height:750px}
+.hline{position:absolute;left:0;right:0;border-top:1px solid #111d28}
+.hlbl{position:absolute;right:3px;font-size:9px;color:#4a6070;transform:translateY(-6px);white-space:nowrap}
+.blk{position:absolute;left:2px;right:2px;border-radius:5px;padding:3px 5px;overflow:hidden;color:#fff;font-size:10px;line-height:1.25;cursor:default;display:flex;flex-direction:column;justify-content:center;transition:filter .15s;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.blk:hover{filter:brightness(1.2);z-index:10}
+.blk .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.blk .mt{opacity:.85;font-size:9px}
+.navbar{background:#0a1219;border-top:1px solid #1a2a3a;padding:10px 18px;display:flex;align-items:center;justify-content:center;gap:10px}
+.nbtn{padding:6px 14px;border-radius:6px;border:1px solid #1a2a3a;background:#12202e;color:#c8d6e0;cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
+.nbtn:hover{background:#1a3048;border-color:#38bdf8}
+.nbtn:disabled{opacity:.3;cursor:default}
+.bkb{padding:6px 12px;border-radius:6px;border:1px solid #1a2a3a;background:#12202e;color:#f59e0b;cursor:pointer;font-size:16px;transition:.15s}
+.bkb.sv{color:#22c55e;background:#0a2018;border-color:#166534}
+.bkb:hover{background:#1a3048}
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);padding:9px 22px;border-radius:8px;font-size:13px;font-weight:600;z-index:100;animation:fi .3s}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:#4a6070;gap:8px;padding:40px 20px;text-align:center}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-left:6px}
+`;
+
+const SH=8,EH=24,TM=(EH-SH)*60;
+
+function TT({entries,colorMap}){
+  return(
+    <div style={{overflow:"auto",flex:1}}>
+      <div className="tgrid">
+        <div className="thdr"/>
+        {DAYS.map(d=><div key={d} className="thdr">{d}</div>)}
+        <div style={{position:"relative"}}>
+          {HOURS.map(h=><div key={h} className="hlbl" style={{top:`${((h-SH)*60/TM)*100}%`}}>{fmtT(h*60)}</div>)}
+        </div>
+        {DAYS.map((day,di)=>(
+          <div key={day} className="dcol" style={{background:di%2===0?"#0c151e":"#0f1923"}}>
+            {HOURS.map(h=><div key={h} className="hline" style={{top:`${((h-SH)*60/TM)*100}%`}}/>)}
+            {entries.filter(e=>e.days.includes(day)).map((e,i)=>{
+              const top=((e.start-SH*60)/TM)*100;
+              const ht=Math.max(((e.end-e.start)/TM)*100,2.5);
+              const bg=colorMap[e.courseId]||"#666";
+              return(
+                <div key={i} className="blk" title={`${e.name} [Sec ${e.sec}]\n${fmtS(e.start)} - ${fmtS(e.end)}\nRoom: ${e.room}\n${e.type==='T'?'Theory':e.type==='L'?'Lab':'Extra'}`}
+                  style={{top:`${top}%`,height:`${ht}%`,background:`linear-gradient(135deg,${bg},${bg}cc)`}}>
+                  <div className="nm">{e.name}</div>
+                  <div className="mt">Sec {e.sec} · {e.room}</div>
+                  {ht>4.5&&<div className="mt">{fmtS(e.start)}–{fmtS(e.end)}</div>}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const[view,setView]=useState("gen");
+  const[showC,setShowC]=useState(true);
+  const[showO,setShowO]=useState(true);
+  const[picked,setPicked]=useState([]);
+  const[earliest,setEarliest]=useState(8*60);
+  const[latest,setLatest]=useState(23*60);
+  const[daysOnly,setDaysOnly]=useState([]);
+  const[sortGaps,setSortGaps]=useState("min");
+  const[routines,setRoutines]=useState([]);
+  const[rIdx,setRIdx]=useState(0);
+  const[bookmarks,setBookmarks]=useState([]);
+  const[busy,setBusy]=useState(false);
+  const[toast,setToast]=useState(null);
+
+  const show=(msg,color="#22c55e")=>{setToast({msg,color});setTimeout(()=>setToast(null),2200)};
+
+  const pickeds=useMemo(()=>picked.map(id=>ALL[id]),[picked]);
+  const avail=ALL.filter(c=>!picked.includes(c.id));
+
+  const add=useCallback(id=>{setPicked(p=>[...p,id]);setRoutines([]);setRIdx(0)},[]);
+  const rm=useCallback(id=>{setPicked(p=>p.filter(x=>x!==id));setRoutines([]);setRIdx(0)},[]);
+  const togDay=useCallback(d=>{setDaysOnly(p=>p.includes(d)?p.filter(x=>x!==d):[...p,d])},[]);
+
+  const doGen=useCallback(()=>{
+    if(!picked.length)return;
+    setBusy(true);
+    setTimeout(()=>{
+      const res=generate(picked.map(id=>ALL[id]),{earliest,latest,daysOnly,sortGaps});
+      setRoutines(res);setRIdx(0);setBusy(false);
+      res.length>0?show(`Found ${res.length} routine${res.length!==1?"s":""}!`):show("No valid routine found","#ef4444");
+    },50);
+  },[picked,earliest,latest,daysOnly,sortGaps]);
+
+  const cur=routines[rIdx]||[];
+  const{entries,colorMap}=useMemo(()=>{
+    const cm={};picked.forEach((id,i)=>{cm[id]=PAL[i%PAL.length]});
+    const ents=[];
+    for(const r of cur)for(const sl of r.slots)for(const day of sl.days)
+      ents.push({courseId:r.courseId,name:r.name,sec:r.sec,room:sl.room,type:sl.type,start:sl.start,end:sl.end,days:[day]});
+    return{entries:ents,colorMap:cm};
+  },[cur,picked]);
+
+  const isBk=cur.length>0&&bookmarks.some(b=>JSON.stringify(b)===JSON.stringify(cur));
+  const togBk=()=>{
+    if(!cur.length)return;
+    if(isBk){setBookmarks(p=>p.filter(b=>JSON.stringify(b)!==JSON.stringify(cur)));show("Removed","#f59e0b")}
+    else{setBookmarks(p=>[...p,cur]);show("Bookmarked! ★")}
+  };
+  const loadBk=(bm,bi)=>{
+    const ids=[...new Set(bm.map(r=>r.courseId))];
+    setPicked(ids);setRoutines([bm]);setRIdx(0);setView("gen");show(`Loaded #${bi+1}`);
+  };
+
+  const tOpts=[];for(let h=8;h<=23;h++)tOpts.push({v:h*60,l:fmtT(h*60)});
+
+  return(
+    <>
+    <style>{css}</style>
+    <div className="wrap">
+      <div className="sidebar">
+        <div style={{fontSize:18,fontWeight:900,color:"#38bdf8",marginBottom:10,fontFamily:"monospace"}}>R</div>
+        {[["gen","📅"],["bk","🔖"],["info","ℹ️"]].map(([v,ic])=>(
+          <button key={v} className={`sb-btn${view===v?" act":""}`} onClick={()=>setView(v)}>{ic}</button>
+        ))}
+      </div>
+      <div className="main-col">
+        <div className="topbar">
+          <div>
+            <span style={{fontWeight:800,fontSize:15,color:"#e0e6ed"}}>AIUB Routine Generator</span>
+            <span className="badge" style={{background:"#0c2a3f",color:"#38bdf8"}}>Fall 2026-27</span>
+          </div>
+          <div style={{fontSize:12,color:"#5a7a94"}}>
+            {picked.length} course{picked.length!==1?"s":""}
+            {routines.length>0&&<span style={{marginLeft:10,color:"#22c55e"}}>● {routines.length} routine{routines.length!==1?"s":""}</span>}
+          </div>
+        </div>
+
+        {view==="gen"&&(
+          <div className="body">
+            <div className="lpanel">
+              <div className="phdr" onClick={()=>setShowC(!showC)}>
+                <span>📚 Add Courses</span><span>{showC?"▾":"▸"}</span>
+              </div>
+              {showC&&(
+                <div style={{padding:"10px 12px",borderBottom:"1px solid #1a2a3a"}}>
+                  {avail.length>0&&(
+                    <div style={{maxHeight:180,overflowY:"auto",background:"#0a1219",border:"1px solid #1a2a3a",borderRadius:7,marginBottom:8}}>
+                      {avail.map(c=>(
+                        <div key={c.id} className="ditem" onClick={()=>add(c.id)}>
+                          <div><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:10,color:"#5a7a94"}}>{c.sections.length} sections</div></div>
+                          <span style={{color:"#38bdf8",fontSize:17}}>+</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {avail.length===0&&picked.length===ALL.length&&<div style={{fontSize:12,color:"#22c55e",padding:8,textAlign:"center"}}>All courses added ✓</div>}
+                  {picked.length>0&&(
+                    <div style={{display:"flex",flexWrap:"wrap",marginTop:4}}>
+                      {pickeds.map((c,i)=>(
+                        <span key={c.id} className="ctag" style={{background:PAL[i%PAL.length]+"18",borderColor:PAL[i%PAL.length]+"55",color:PAL[i%PAL.length]}}>
+                          {c.name.length>28?c.name.slice(0,26)+"…":c.name}
+                          <button className="tx" onClick={()=>rm(c.id)}>×</button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div style={{marginTop:6,fontSize:11,color:"#5a7a94"}}>[ Total Courses: {picked.length} ]</div>
+                </div>
+              )}
+
+              <div className="phdr" onClick={()=>setShowO(!showO)}>
+                <span>⚙️ Generate Options</span><span>{showO?"▾":"▸"}</span>
+              </div>
+              {showO&&(
+                <div style={{borderBottom:"1px solid #1a2a3a",paddingBottom:4}}>
+                  <div className="orow"><span>Earliest Start</span>
+                    <select className="osel" value={earliest} onChange={e=>setEarliest(+e.target.value)}>{tOpts.map(o=><option key={o.v} value={o.v}>{o.l}</option>)}</select>
+                  </div>
+                  <div className="orow"><span>Latest End</span>
+                    <select className="osel" value={latest} onChange={e=>setLatest(+e.target.value)}>{tOpts.map(o=><option key={o.v} value={o.v}>{o.l}</option>)}</select>
+                  </div>
+                  <div className="orow" style={{flexDirection:"column",alignItems:"flex-start",gap:4}}><span>Classes Only On</span></div>
+                  <div className="dchecks">
+                    {DAYS.map(d=><label key={d} className={`dchk${daysOnly.includes(d)?" on":""}`} onClick={()=>togDay(d)}>{d}</label>)}
+                  </div>
+                  <div className="orow"><span>Sort by Gaps?</span>
+                    <select className="osel" value={sortGaps} onChange={e=>setSortGaps(e.target.value)}>
+                      <option value="min">Minimize Gaps</option><option value="none">No Preference</option>
+                    </select>
+                  </div>
+                  <button className="gbtn" onClick={doGen} disabled={busy||!picked.length}>{busy?"⏳ Generating...":"⚡ Generate Routines"}</button>
+                  {!picked.length&&<div style={{textAlign:"center",fontSize:11,color:"#5a7a94",paddingBottom:6}}>Add courses first</div>}
+                </div>
+              )}
+            </div>
+
+            <div className="rpanel">
+              {entries.length===0?(
+                <div className="empty">
+                  <div style={{fontSize:44}}>📅</div>
+                  <div style={{fontSize:14,fontWeight:600}}>Your routine will appear here</div>
+                  <div style={{fontSize:12}}>Add courses → set options → generate</div>
+                </div>
+              ):(
+                <TT entries={entries} colorMap={colorMap}/>
+              )}
+              {routines.length>0&&(
+                <div className="navbar">
+                  <button className="nbtn" disabled={rIdx===0} onClick={()=>setRIdx(i=>i-1)}>◀ Prev</button>
+                  <span style={{fontWeight:700,fontSize:15,color:"#e0e6ed",minWidth:65,textAlign:"center"}}>{rIdx+1} / {routines.length}</span>
+                  <button className="nbtn" disabled={rIdx>=routines.length-1} onClick={()=>setRIdx(i=>i+1)}>Next ▶</button>
+                  <button className={`bkb${isBk?" sv":""}`} onClick={togBk}>{isBk?"★":"☆"}</button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {view==="bk"&&(
+          <div style={{padding:20,maxWidth:800,margin:"0 auto",flex:1,overflowY:"auto"}}>
+            <h2 style={{fontSize:17,fontWeight:700,marginBottom:14,color:"#c8d6e0"}}>🔖 Bookmarked Routines</h2>
+            {bookmarks.length===0?(
+              <div className="empty" style={{padding:30}}><div style={{fontSize:36}}>🔖</div><div>No bookmarks yet</div><div style={{fontSize:12}}>Generate routines and click ☆ to save</div></div>
+            ):(
+              <div style={{display:"flex",flexDirection:"column",gap:10}}>
+                {bookmarks.map((bm,bi)=>(
+                  <div key={bi} style={{background:"#12202e",border:"1px solid #1a2a3a",borderRadius:10,padding:14,cursor:"pointer"}} onClick={()=>loadBk(bm,bi)}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                      <span style={{fontWeight:700,color:"#38bdf8",fontSize:14}}>Routine #{bi+1}</span>
+                      <button style={{background:"none",border:"none",color:"#ef4444",fontSize:15,cursor:"pointer"}}
+                        onClick={e=>{e.stopPropagation();setBookmarks(p=>p.filter((_,i)=>i!==bi));show("Deleted","#ef4444")}}>✕</button>
+                    </div>
+                    <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                      {bm.map((r,ri)=>(
+                        <span key={ri} style={{padding:"3px 9px",borderRadius:6,fontSize:11,fontWeight:600,background:PAL[ri%PAL.length]+"22",color:PAL[ri%PAL.length],border:`1px solid ${PAL[ri%PAL.length]}44`}}>
+                          {r.name} (Sec {r.sec})
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {view==="info"&&(
+          <div style={{padding:20,maxWidth:650,margin:"0 auto",flex:1}}>
+            <h2 style={{fontSize:17,fontWeight:700,marginBottom:14,color:"#c8d6e0"}}>ℹ️ How to Use</h2>
+            <div style={{background:"#12202e",border:"1px solid #1a2a3a",borderRadius:10,padding:18,lineHeight:1.8,fontSize:13,color:"#a0b4c4"}}>
+              <p><strong style={{color:"#38bdf8"}}>1.</strong> Click <strong style={{color:"#e0e6ed"}}>+ </strong> next to a course to add it. Remove with ×.</p>
+              <p style={{marginTop:10}}><strong style={{color:"#38bdf8"}}>2.</strong> Set your preferred earliest start, latest end, and which days you want.</p>
+              <p style={{marginTop:10}}><strong style={{color:"#38bdf8"}}>3.</strong> Hit <strong style={{color:"#e0e6ed"}}>Generate Routines</strong> — finds all clash-free section combos (up to 500).</p>
+              <p style={{marginTop:10}}><strong style={{color:"#38bdf8"}}>4.</strong> Use <strong style={{color:"#e0e6ed"}}>◀ Prev / Next ▶</strong> to browse. Each is a unique valid schedule.</p>
+              <p style={{marginTop:10}}><strong style={{color:"#38bdf8"}}>5.</strong> Click <strong style={{color:"#f59e0b"}}>☆</strong> to bookmark. View saved routines in 🔖.</p>
+              <hr style={{border:"none",borderTop:"1px solid #1a2a3a",margin:"14px 0"}}/>
+              <p style={{fontSize:11,color:"#5a7a94"}}>Courses loaded from manual_courses.xlsx · 5 courses, 82 sections · Days: S=Sun, M=Mon, T=Tue, W=Wed, TH=Thu</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+    {toast&&<div className="toast" style={{background:toast.color+"22",color:toast.color,border:`1px solid ${toast.color}55`}}>{toast.msg}</div>}
+    </>
+  );
+}
+
+
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
+</body>
+</html>
